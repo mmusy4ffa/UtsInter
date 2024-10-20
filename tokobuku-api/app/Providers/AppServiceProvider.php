@@ -25,5 +25,12 @@ class AppServiceProvider extends ServiceProvider
             $allowedCategories = ['nama_kategori'];
             return in_array($value, $allowedCategories);
         });
+
+        // Validator::extend('buku', function ($attribute, $value, $parameters, $validator) {
+
+        //     $allowedCategories = ['judul', 'penulis', 'harga', 'stok', 'kategori_id'];
+        //     return in_array($value, $allowedCategories);
+        // });
     }
+
 }
