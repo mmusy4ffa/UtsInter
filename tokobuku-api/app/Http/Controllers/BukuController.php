@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use Illuminate\Http\Request;
+use Log;
 
 class BukuController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -21,9 +23,9 @@ class BukuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required|string|max:255', //harus disi
+            'judul' => 'required|string|max:255', // nama tidak boleh kosong
             'penulis' => 'required',
-            'harga' => 'required|numeric|min:1000', //menambahkan min untuk memasang harga minimal 1000 rup
+            'harga' => 'required|numeric|min:1000', //untuk harga minimal 1000
             'stok' => 'required',
             'kategori_id' => 'required',
         ]);
@@ -37,7 +39,15 @@ class BukuController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $buku = Buku::find($id);
+
+        if (!$buku) {
+            return response()->json(['message' => 'Buku tidak ditemukan'], 404);
+        }
+
+        return response()->json($buku);
+
+
     }
 
     /**
@@ -52,9 +62,9 @@ class BukuController extends Controller
         }
 
         $request->validate([
-            'judul' => 'required|string|max:255', // harus di isi
+            'judul' => 'required|string|max:255',
             'penulis' => 'required',
-            'harga' => 'required|numeric|min:1000', //harga min 1000
+            'harga' => 'required|numeric|min:1000',
             'stok' => 'required',
             'kategori_id' => 'required',
         ]);
@@ -81,23 +91,56 @@ class BukuController extends Controller
 
     }
 
+    // public function search(Request $request)
+    // {
+    //     $query = Buku::query();
+
+    //     if ($request->has('judul')) {
+    //         $query->where('judul', 'like', '%' . $request->input('judul') . '%');
+    //     }
+
+    //     if ($request->has('kategori_id')) {
+    //         $query->where('kategori_id', $request->input('kategori_id'));
+    //     }
+
+
+    //     $bukus = $query->get();
+
+    //     return response()->json($bukus, 200);
+    // }
+
+    // public function search(Request $request)
+    // {
+    //    $request->validate([
+    //         'judul' => 'required|string|max:255',
+    //     ]);
+
+    //     $query = Buku::where('judul', 'like', '%' . $request->judul . '%')->get();
+
+    //     if ($query->isEmpty()) {
+    //         return response()->json(['message' => 'Tidak ada buku ditemukan dengan judul tersebut'], 404);
+    //     }
+
+    //     return response()->json($query, 200);
+    // }
+
     public function search(Request $request)
     {
-        $query = Buku::query();
+        try {
+            $kategori = $request->input('kategori');
+            $buku = Buku::whereHas('kategori', function ($query) use ($kategori) {
+                $query->where('nama_kategori', 'like', '%' . $kategori . '%');
+            })->get();
 
-        //mencari menggunakan judul
-        if ($request->has('judul')) {
-            $query->where('judul', 'like', '%' . $request->input('judul') . '%');
+            return response()->json($buku, 202);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Terjadi kesalahan saat mencari buku',
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        //menggunakan kategori
-        if ($request->has('kategori_id')) {
-            $query->where('kategori_id', $request->input('kategori_id'));
-        }
-
-        $bukus = $query->get();
-
-        return response()->json($bukus, 200);
-
     }
+
+
+
 }

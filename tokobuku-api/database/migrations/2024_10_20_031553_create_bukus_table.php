@@ -11,20 +11,20 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('bukus', function (Blueprint $table) {
-            // $table->id();
-            // $table->string('judul');
-            // $table->string('penulis');
-            // $table->decimal('harga', 8, 2);
-            // $table->integer('stok');
-            // $table->foreignId('kategori_id')->constrained('kategoris')->onDelete('cascade');
-            // $table->timestamps();
-
             $table->id();
             $table->string('judul');
             $table->string('penulis');
-            $table->decimal('harga', 10, 2);
-            $table->unsignedBigInteger('kategori_id');
+            $table->decimal('harga', 8, 2);
+            $table->integer('stok');
+            $table->foreignId('kategori_id')->constrained('kategoris')->onDelete('cascade');
             $table->timestamps();
+
+            // $table->id();
+            // $table->string('judul');
+            // $table->string('penulis');
+            // $table->decimal('harga', 10, 2);
+            // $table->unsignedBigInteger('kategori_id');
+            // $table->timestamps();
         });
     }
 
