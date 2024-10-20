@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buku;
 use Illuminate\Http\Request;
 
 class BukuController extends Controller
@@ -11,7 +12,7 @@ class BukuController extends Controller
      */
     public function index()
     {
-        //
+        return Buku::all();
     }
 
     /**
@@ -19,7 +20,16 @@ class BukuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'judul' => 'required',
+            'penulis' => 'required',
+            'harga' => 'required',
+            'stok' => 'required',
+            'kategori_id' => 'required',
+        ]);
+
+        $kategori = Buku::create($request->all());
+        return response()->json($kategori, 201);
     }
 
     /**
@@ -43,6 +53,15 @@ class BukuController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $buku = Buku::find($id);
+
+        if (!$buku) {
+            return response()->json(['message' => 'Buku tidak ditemukan'], 404);
+        }
+
+        $buku->delete();
+
+        return response()->json(['message' => 'Buku berhasil dihapus'], 200);
+
     }
 }

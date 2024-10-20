@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Validator::extend('kategori', function ($attribute, $value, $parameters, $validator) {
 
-            $allowedCategories = ['electronics', 'furniture', 'clothing'];
+            $allowedCategories = ['nama_kategori'];
             return in_array($value, $allowedCategories);
         });
     }
