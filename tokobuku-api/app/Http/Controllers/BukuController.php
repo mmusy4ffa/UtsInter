@@ -91,38 +91,6 @@ class BukuController extends Controller
 
     }
 
-    // public function search(Request $request)
-    // {
-    //     $query = Buku::query();
-
-    //     if ($request->has('judul')) {
-    //         $query->where('judul', 'like', '%' . $request->input('judul') . '%');
-    //     }
-
-    //     if ($request->has('kategori_id')) {
-    //         $query->where('kategori_id', $request->input('kategori_id'));
-    //     }
-
-
-    //     $bukus = $query->get();
-
-    //     return response()->json($bukus, 200);
-    // }
-
-    // public function search(Request $request)
-    // {
-    //    $request->validate([
-    //         'judul' => 'required|string|max:255',
-    //     ]);
-
-    //     $query = Buku::where('judul', 'like', '%' . $request->judul . '%')->get();
-
-    //     if ($query->isEmpty()) {
-    //         return response()->json(['message' => 'Tidak ada buku ditemukan dengan judul tersebut'], 404);
-    //     }
-
-    //     return response()->json($query, 200);
-    // }
 
     public function search(Request $request)
     {
